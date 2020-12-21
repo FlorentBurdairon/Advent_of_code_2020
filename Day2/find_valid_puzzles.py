@@ -20,11 +20,12 @@ def analyse_list_of_entries( input_list ):
     nb_valid_pwds = 0
     for element in input_list:
         bounds, pattern, in_string = analyse_individual_entry( element )
-        validity = check_if_entry_is_valid( bounds, pattern, in_string )
+        #validity = check_if_entry_is_valid_part1( bounds, pattern, in_string )
+        validity = check_if_entry_is_valid_part2( bounds, pattern, in_string )
         nb_valid_pwds += validity
     return nb_valid_pwds
 
-def check_if_entry_is_valid( bounds, pattern, in_string ):
+def check_if_entry_is_valid_part1( bounds, pattern, in_string ):
     nb = 0
     for character in in_string:
         if character == pattern:
@@ -38,6 +39,16 @@ def check_if_entry_is_valid( bounds, pattern, in_string ):
         validity = 1
     return validity
 
+def check_if_entry_is_valid_part2( bounds, pattern, in_string ):
+    nb = 0
+    if in_string[bounds[0]-1] == pattern or in_string[bounds[1]-1] == pattern:
+        if in_string[bounds[0]-1] == pattern and in_string[bounds[1]-1] == pattern:
+            validity = 0
+        else:
+            validity = 1
+    else:
+        validity = 0
+    return validity
 
 filename = "puzzle.input"
 dirname = "./"
