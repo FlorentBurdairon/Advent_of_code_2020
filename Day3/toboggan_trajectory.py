@@ -1,5 +1,4 @@
 # Solve day3 : find the number of trees you will encounter
-# Remember : the slope is right 3, down 1
 import numpy as np
 
 def read_puzzle_input( myfilename ):
@@ -33,37 +32,24 @@ def convert_input_to_matrix( input_list ):
         i += 1
     return input_forest_matrix
 
-def repeat_forest( slope, input_forest_matrix ):
-    Lx = input_forest_matrix.shape[1]
-    Ly = input_forest_matrix.shape[0]
-    dx = slope[0] ; dy = slope[1]
-    delta_x = Lx-1 ; delta_y = Ly-1
-    if dy/dx < delta_y/delta_x:
-        delta_y_max = delta_y
-        delta_x_max = delta_y_max* dx/dy
-        x_mult = int(delta_x_max/Lx) +1
-        print(f"The forest must be repeated {x_mult} times in the direction x")
-        repeated_forest = np.tile( input_forest_matrix, x_mult )
-    else:
-        print("No need to repeat horizontally")
-        repeated_forest = input_forest_matrix
-    return repeated_forest
-
-def get_path_into_forest( slope, repeated_forest ):
+def get_path_into_forest( slope, forest_matrix ):
     path = np.array([], dtype=np.int8)
+    dx = slope[0]
+    dy = slope[1]
     x_pos = 0
     y_pos = 0
-    while y_pos < repeated_forest.shape[0]:
-        path = np.append(path, repeated_forest[y_pos, x_pos])
-        x_pos += slope[0]
+    while y_pos < forest_matrix.shape[0]:
+        path = np.append(path, forest_matrix[y_pos, x_pos])
         y_pos += slope[1]
+        x_pos += slope[0]
+        if x_pos >= Lx:
+            x_pos = x_pos-Lx
     nb_trees = sum(path)
     return nb_trees
 
 def solve_part1( slope, input_list ):
     input_forest_matrix = convert_input_to_matrix( input_list )
-    repeated_forest = repeat_forest( slope, input_forest_matrix )
-    nb_encountered_trees = get_path_into_forest( slope, repeated_forest )
+    nb_encountered_trees = get_path_into_forest( slope, input_forest_matrix )
     return nb_encountered_trees
 
 def solve_part2( list_of_slopes, input_list ):
